@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Consulta de Extranjería</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <span class="brand-mark" aria-hidden="true">E</span>
+      <div class="brand-text">
+        <h1>Consulta de Extranjería</h1>
+        <p>Agenda local · Información de expedientes</p>
+      </div>
+    </header>
+
+    <div id="status" class="status" role="status" aria-live="polite" hidden></div>
+
+    <main>
+      <section id="view-list" class="view">
+        <label class="sr-only" for="search">Buscar clientes</label>
+        <input id="search" class="search" type="search" placeholder="Buscar por nombre o NIE" autocomplete="off">
+        <div id="client-list" class="client-list"></div>
+        <p id="empty-list" class="empty" hidden>No hay clientes que coincidan con la búsqueda.</p>
+        <div class="view-actions">
+          <button id="btn-add" class="btn btn-primary" type="button">Añadir cliente</button>
+          <button id="btn-settings" class="btn btn-ghost" type="button">Datos y CSV</button>
+        </div>
+      </section>
+
+      <section id="view-detail" class="view" hidden>
+        <button class="back" type="button" data-back="list">← Clientes</button>
+        <h2 id="detail-name" class="view-title"></h2>
+        <dl class="detail-grid">
+          <dt>NIE</dt><dd id="detail-nie"></dd>
+          <dt>Fecha de presentación</dt><dd id="detail-presentation"></dd>
+          <dt>Año de nacimiento</dt><dd id="detail-birth-year"></dd>
+        </dl>
+        <p class="hint">Se rellenarán los tres campos del formulario. El CAPTCHA y la consulta los hace siempre el usuario en la página oficial.</p>
+        <div class="view-actions stacked">
+          <button id="btn-fill" class="btn btn-primary" type="button">Rellenar formulario</button>
+          <button id="btn-edit" class="btn btn-ghost" type="button">Editar datos</button>
+        </div>
+      </section>
+
+      <section id="view-form" class="view" hidden>
+        <button class="back" type="button" data-back-context="form">← Volver</button>
+        <h2 id="form-title" class="view-title">Nuevo cliente</h2>
+        <form id="client-form" novalidate>
+          <div class="field">
+            <label for="f-name">Nombre y apellidos</label>
+            <input id="f-name" name="name" type="text" maxlength="120" autocomplete="off" required>
+          </div>
+          <div class="field">
+            <label for="f-nie">NIE</label>
+            <input id="f-nie" name="nie" type="text" maxlength="15" autocomplete="off" required placeholder="X1234567L">
+          </div>
+          <div class="field">
+            <label for="f-presentation">Fecha de presentación de la solicitud</label>
+            <input id="f-presentation" name="presentationDate" type="text" maxlength="10" inputmode="numeric" autocomplete="off" required placeholder="DD/MM/AAAA">
+          </div>
+          <div class="field">
+            <label for="f-birth-year">Año de nacimiento</label>
+            <input id="f-birth-year" name="birthYear" type="text" maxlength="4" inputmode="numeric" autocomplete="off" required placeholder="1980">
+          </div>
+          <div id="form-errors" class="message message-error" hidden></div>
+          <div id="form-warnings" class="message message-warning" hidden></div>
+          <div class="view-actions">
+            <button class="btn btn-primary" type="submit">Guardar</button>
+            <button id="btn-form-cancel" class="btn btn-ghost" type="button">Cancelar</button>
+          </div>
+        </form>
+      </section>
+
+      <section id="view-settings" class="view" hidden>
+        <button class="back" type="button" data-back="list">← Clientes</button>
+        <h2 class="view-title">Datos y copias de seguridad</h2>
+        <p class="hint">Exporte una copia antes de importar. La importación nunca elimina registros existentes sin confirmación.</p>
+        <div class="view-actions stacked">
+          <button id="btn-export" class="btn btn-primary" type="button">Exportar CSV</button>
+          <button id="btn-import" class="btn btn-ghost" type="button">Importar CSV</button>
+        </div>
+        <input id="file-import" type="file" accept=".csv,text/csv" hidden>
+        <p class="privacy-note">Los datos permanecen solo en este navegador. No hay cuentas, sincronización ni servicios externos.</p>
+      </section>
+
+      <section id="view-import" class="view" hidden>
+        <button class="back" type="button" data-back="settings">← Datos</button>
+        <h2 class="view-title">Revisar importación</h2>
+        <div id="import-summary" class="summary"></div>
+        <div id="import-errors" class="error-list" hidden></div>
+        <div class="view-actions stacked">
+          <button id="btn-import-new" class="btn btn-primary" type="button">Importar solo nuevos</button>
+          <button id="btn-import-update" class="btn btn-ghost" type="button" hidden>Importar y actualizar duplicados</button>
+          <button id="btn-import-cancel" class="btn btn-ghost" type="button">Cancelar</button>
+        </div>
+      </section>
+    </main>
+
+    <div id="confirm-modal" class="modal" hidden>
+      <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
+        <h2 id="confirm-title" class="view-title"></h2>
+        <p id="confirm-message" class="hint"></p>
+        <div class="view-actions">
+          <button id="confirm-ok" class="btn btn-danger" type="button">Confirmar</button>
+          <button id="confirm-cancel" class="btn btn-ghost" type="button">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="popup.js"></script>
+</body>
+</html>
